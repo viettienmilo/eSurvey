@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'tailwindcss';
+@import 'daisyui';
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --color-bg-page: oklch(20.8% 0.042 265.755); /* slate-900*/
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: var(--color-bg-page);
+}
