@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { questions, likertOptions } from './../assets/data.js'
 
 const Survey = () => {
     const total = 5;
