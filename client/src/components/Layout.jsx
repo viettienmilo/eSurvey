@@ -1,15 +1,15 @@
-import { Outlet } from 'react-router'
-import Navbar from './Navbar'
+import { Outlet } from "react-router";
+import Navbar from "./Navbar";
 
 const Layout = () => {
-    return (
-        <div className="w-[90%] h-screen flex flex-col mx-auto">
-            <Navbar />
-            <div className="flex-1 flex items-center justify-center ">
-                <Outlet />
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="w-[90%] h-screen flex flex-col mx-auto">
+      <Navbar />
+      <div className="flex-1 flex items-center justify-center my-6">
+        <Outlet />
+      </div>
+    </div>
+  );
+};
 
-export default Layout
+export default Layout;
