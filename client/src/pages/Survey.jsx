@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
-import { questions, likertOptions } from "./../assets/data.js";
+import axiosInstance from './../axios/instance.js';
+import { survey_id } from "./../assets/data.js";
 import { motion, AnimatePresence } from "framer-motion";
+import confetti from 'canvas-confetti'
 
 const Survey = () => {
-  const total = questions.length;
+  // const total = questions.length;
+  const [questions, setQuestions] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  // load current step/answer from local storage
   const [step, setStep] = useState(() => {
     return parseInt(localStorage.getItem("eSurvey-step")) || 0;
   });
@@ -11,6 +17,30 @@ const Survey = () => {
     const ans = localStorage.getItem("eSurvey-ans");
     return ans ? JSON.parse(ans) : {};
   });
+
+  // save answer/current step to local storage for refreshing page
+  useEffect(() => {
+    const ans = JSON.stringify(answers);
+    localStorage.setItem("eSurvey-ans", ans);
+  }, [answers]);
+
+  useEffect(() => {
+    localStorage.setItem("eSurvey-step", step);
+  }, [step]);
+
+  // load questions from database
+  useEffect(() => {
+    const getQuestions = async () => {
+      const response = await axiosInstance.get(`/api/questions/${survey_id}`);
+      setQuestions(response.data);
+      setTotal(response.data?.length);
+    }
+
+    getQuestions();
+  }, []);
+
+  // console.log(questions);
+  // console.log(total);
 
   const start = () => {
     setStep(1);
@@ -25,7 +55,20 @@ const Survey = () => {
   };
 
   const finish = () => {
+    const sendAnswer = async () => {
+      try {
+        await axiosInstance.post("/api/answers/send-answer", { survey_id, answers });
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    sendAnswer();
     setStep(total + 1);
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { x: 0.5, y: 0.5 },
+    });
   };
 
   const reset = () => {
@@ -38,15 +81,6 @@ const Survey = () => {
   const handleChange = (index, value) => {
     setAnswers({ ...answers, [questions[index].id]: value });
   };
-
-  useEffect(() => {
-    const ans = JSON.stringify(answers);
-    localStorage.setItem("eSurvey-ans", ans);
-  }, [answers]);
-
-  useEffect(() => {
-    localStorage.setItem("eSurvey-step", step);
-  }, [step]);
 
   console.log(answers);
 
@@ -86,14 +120,6 @@ const Survey = () => {
         {step >= 1 && step <= total && (
           <div className="flex-1 flex flex-row lg:flex-col ml-4 mt-6 lg:mt-4">
             {/* Progress indicator */}
-            {/* <ul className="steps steps-vertical lg:steps-horizontal lg:w-full">
-              {Array.from({ length: total }).map((_, index) => (
-                <li
-                  key={index}
-                  className={`step ${index <= step - 1 ? "step-primary" : ""}`}
-                ></li>
-              ))}
-            </ul> */}
             <ul className="steps steps-vertical lg:steps-horizontal lg:w-full">
               {Array.from({ length: total }).map((_, index) => {
                 const isActive = index <= step - 1;
@@ -121,9 +147,9 @@ const Survey = () => {
                     Câu {step}: {questions[step - 1].text}
                   </p>
                   {/* Likert options and Answers */}
-                  {questions[step - 1].type === "likert" && (
+                  {questions[step - 1].question_type === "likert" && (
                     <div className="flex flex-col lg:flex-row w-full lg:justify-around gap-4 mx-6 my-6">
-                      {likertOptions.map((item) => (
+                      {questions[step - 1].question_options.options.map((item) => (
                         <label
                           key={item.value}
                           className="flex items-center gap-4 cursor-pointer"
@@ -146,9 +172,9 @@ const Survey = () => {
                     </div>
                   )}
                   {/* Demographic options and Answers */}
-                  {questions[step - 1].type === "select" && (
+                  {questions[step - 1].question_type === "select" && (
                     <div className="flex flex-col lg:flex-row w-full justify-around mx-6 my-6">
-                      {questions[step - 1].options.map((item, index) => (
+                      {questions[step - 1].question_options.options.map((item, index) => (
                         <label
                           key={index}
                           className="flex items-center gap-2 cursor-pointer"

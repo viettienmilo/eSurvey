@@ -1,8 +1,8 @@
-import React from "react";
 import HeroImg from "./../assets/esurvey-hero.png";
 import { Link } from "react-router";
 
-const Hero = () => {
+const Hero = ({ survey }) => {
+
   return (
     <div className="hero">
       <div className="hero-content flex-col lg:flex-row-reverse">
@@ -13,8 +13,8 @@ const Hero = () => {
           </h1>
           <p className="pt-6">
             Để phục vụ quý khách hàng tốt hơn trong quá trình trải nghiệm dịch
-            vụ, chúng tôi tiến hành thực hiện khảo sát lấy ý kiến khách hàng về
-            dịch vụ du lịch tại Thành phố biển Nha Trang.
+            vụ, chúng tôi tiến hành thực hiện
+            <span className="text-emerald-400"> {survey?.title}.</span>
           </p>
           <p className="pt-2 pb-6">
             Nếu khách hàng đang sinh sống tại thành phố Hồ Chí Minh, vui lòng
