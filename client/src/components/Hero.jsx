@@ -17,8 +17,7 @@ const Hero = ({ survey }) => {
             <span className="text-emerald-400"> {survey?.title}.</span>
           </p>
           <p className="pt-2 pb-6">
-            Nếu khách hàng đang sinh sống tại thành phố Hồ Chí Minh, vui lòng
-            nhấn nút "Bắt đầu" để tiến hành khảo sát. Xin chân thành cám ơn Quý
+            Quý khách vui lòng nhấn nút "Bắt đầu" để tiến hành khảo sát. Xin chân thành cám ơn Quý
             khách hàng.
           </p>
           <Link
