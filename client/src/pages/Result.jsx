@@ -75,6 +75,7 @@ const Result = () => {
             Số người tham gia khảo sát:{" "}
             <i className="text-blue-400">{stats?.respondents}</i>
           </h2>
+          <h2 className="text-lg m-3 ml-5">Giới tính người tham gia khảo sát:</h2>
           <div className="ml-3">
             <span className="text-lg m-3 ml-5">
               Nam: <i className="text-blue-400">{stats?.male}</i>
@@ -83,25 +84,55 @@ const Result = () => {
               Nữ: <i className="text-blue-400">{stats?.female}</i>
             </span>
             <span className="text-lg m-3 ml-5">
-              Khác: <i className="text-blue-400">{stats?.other}</i>
+              Khác: <i className="text-blue-400">{stats?.otherGender}</i>
             </span>
           </div>
-          <h2 className="text-lg m-3 ml-5">Độ tuổi tham gia khảo sát:</h2>
+          <h2 className="text-lg m-3 ml-5">Độ tuổi người tham gia khảo sát:</h2>
           <div className="ml-3">
             <span className="text-lg m-3 ml-5">
-              &lt; 18: <i className="text-blue-400">{stats?.u18}</i>
+              Dưới 18t: <i className="text-blue-400">{stats?.u18}</i>
             </span>
             <span className="text-lg m-3 ml-5">
-              18-24: <i className="text-blue-400">{stats?.f18t24}</i>
+              18-24t: <i className="text-blue-400">{stats?.f18t24}</i>
             </span>
             <span className="text-lg m-3 ml-5">
-              25-34: <i className="text-blue-400">{stats?.f25t34}</i>
+              25-34t: <i className="text-blue-400">{stats?.f25t34}</i>
             </span>
             <span className="text-lg m-3 ml-5">
-              35-44: <i className="text-blue-400">{stats?.f35t44}</i>
+              35-44t: <i className="text-blue-400">{stats?.f35t44}</i>
             </span>
             <span className="text-lg m-3 ml-5">
-              45+: <i className="text-blue-400">{stats?.over45}</i>
+              45t+: <i className="text-blue-400">{stats?.over45}</i>
+            </span>
+          </div>
+          <h2 className="text-lg m-3 ml-5">Nghề nghiệp người tham gia khảo sát:</h2>
+          <div className="ml-3">
+            <span className="text-lg m-3 ml-5">
+              Sinh viên/HS: <i className="text-blue-400">{stats?.student}</i>
+            </span>
+            <span className="text-lg m-3 ml-5">
+              Nhân viên: <i className="text-blue-400">{stats?.staff}</i>
+            </span>
+            <span className="text-lg m-3 ml-5">
+              Kinh doanh: <i className="text-blue-400">{stats?.business}</i>
+            </span>
+            <span className="text-lg m-3 ml-5">
+              Khác: <i className="text-blue-400">{stats?.otherCareer}</i>
+            </span>
+          </div>
+          <h2 className="text-lg m-3 ml-5">Thu nhập người tham gia khảo sát:</h2>
+          <div className="ml-3">
+            <span className="text-lg m-3 ml-5">
+              Dưới 5 triệu: <i className="text-blue-400">{stats?.u5mil}</i>
+            </span>
+            <span className="text-lg m-3 ml-5">
+              5 - 10 triệu: <i className="text-blue-400">{stats?.f5t10mil}</i>
+            </span>
+            <span className="text-lg m-3 ml-5">
+              10 - 20 triệu: <i className="text-blue-400">{stats?.f10t20mil}</i>
+            </span>
+            <span className="text-lg m-3 ml-5">
+              Trên 20 triệu: <i className="text-blue-400">{stats?.over20mil}</i>
             </span>
           </div>
         </div>
