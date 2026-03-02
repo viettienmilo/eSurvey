@@ -1,6 +1,6 @@
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from "recharts";
 
-const BarPlot = ({ data, xKeys, yKeys, title }) => {
+const BarPlot = ({ data, xKeys, yKeys, xLabels, title }) => {
     return (
         <>
             <h2 className="text-xl text-center mb-2">{title}</h2>
@@ -15,7 +15,7 @@ const BarPlot = ({ data, xKeys, yKeys, title }) => {
                     }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey={xKeys[0]} />
+                    <XAxis dataKey={xKeys[0]} tickFormatter={(v) => xLabels[v]} />
                     <YAxis />
                     <Tooltip />
                     <Legend />

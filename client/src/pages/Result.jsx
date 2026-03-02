@@ -39,6 +39,13 @@ const Result = () => {
     console.log(plot2Data);
     console.log(stats);
 
+    const shoppingFreq = {
+        1: "Hàng ngày",
+        2: "Hàng tuần",
+        3: "Hàng tháng",
+        4: "Hiếm khi"
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: -40 }}
@@ -56,12 +63,14 @@ const Result = () => {
                     data={plot1Data}
                     xKeys={["Tần suất mua sắm"]}
                     yKeys={["Nam", "Nữ", "Khác"]}
+                    xLabels={shoppingFreq}
                     title="Tần suất mua sắm theo giới tính"
                 />
-                <BarStackPlot
+                <BarPlot
                     data={plot2Data}
                     xKeys={["Tần suất mua sắm"]}
                     yKeys={["Nam", "Nữ", "Khác"]}
+                    xLabels={shoppingFreq}
                     title="Tần suất mua sắm theo giới tính (%)"
                 />
             </div>

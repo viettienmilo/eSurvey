@@ -108,27 +108,44 @@ export const getPlot1Data = async (req, res) => {
     const question_id = req.params.id3;
     try {
         const [results, _] = await connection.query(`
-            SELECT 
-                d.\`Tần suất mua sắm\`,
-                COALESCE(SUM(CASE WHEN g.answer = 1 THEN 1 END),0) AS "Nam",
-                COALESCE(SUM(CASE WHEN g.answer = 2 THEN 1 END),0) AS "Nữ",
-                COALESCE(SUM(CASE WHEN g.answer = 3 THEN 1 END),0) AS "Khác"
-            FROM (
-                SELECT 1 AS answer, 'Hàng ngày' AS \`Tần suất mua sắm\`
-                UNION ALL SELECT 2, 'Hàng tuần' 
-                UNION ALL SELECT 3, 'Hàng tháng' 
-                UNION ALL SELECT 4, 'Hiếm khi' 
-            ) d
-            LEFT JOIN answers l 
-                ON l.answer = d.answer AND l.question_id = ?
-            LEFT JOIN questions q
-                ON l.question_id = q.id and q.survey_id = ?
-            LEFT JOIN answers g 
-                ON l.respondent_id = g.respondent_id
-                AND g.question_id = ?
-            GROUP BY d.answer, d.\`Tần suất mua sắm\`
-            ORDER BY d.answer;`,
-            [question_id, survey_id, gender_question]
+            WITH likert_scale AS (
+                SELECT 1 AS likert
+                UNION ALL SELECT 2
+                UNION ALL SELECT 3
+                UNION ALL SELECT 4
+            ),
+            survey_data AS (
+                SELECT
+                    a1.answer AS likert,
+                    a2.answer AS gender
+                FROM answers a1
+                JOIN answers a2
+                    ON a1.respondent_id = a2.respondent_id
+                JOIN respondents r
+                    ON a1.respondent_id = r.id
+                WHERE r.survey_id = ?
+                AND a1.question_id = ?
+                AND a2.question_id = ?
+            ),
+            counts AS (
+                SELECT
+                    likert,
+                    SUM(CASE WHEN gender = 1 THEN 1 ELSE 0 END) AS Male,
+                    SUM(CASE WHEN gender = 2 THEN 1 ELSE 0 END) AS Female,
+                    SUM(CASE WHEN gender = 3 THEN 1 ELSE 0 END) AS Other
+                FROM survey_data
+                GROUP BY 1
+            )
+            SELECT
+                l.likert AS \`Tần suất mua sắm\`,
+                COALESCE(c.Male, 0) AS Nam,
+                COALESCE(c.Female, 0) AS Nữ,
+                COALESCE(c.Other, 0) AS Khác
+            FROM likert_scale l
+            LEFT JOIN counts c
+                ON l.likert = c.likert
+            ORDER BY l.likert;`,
+            [survey_id, question_id, gender_question]
         );
 
         // for debug
@@ -149,27 +166,56 @@ export const getPlot2Data = async (req, res) => {
     const question_id = req.params.id3;
     try {
         const [results, _] = await connection.query(`
-            SELECT 
-                d.\`Tần suất mua sắm\`,
-                COALESCE(ROUND(100 * SUM(CASE WHEN g.answer = 1 THEN 1 END) / NULLIF(COUNT(g.answer),0),2), 0) AS "Nam",
-                COALESCE(ROUND(100 * SUM(CASE WHEN g.answer = 2 THEN 1 END) / NULLIF(COUNT(g.answer),0),2), 0) AS "Nữ",
-                COALESCE(ROUND(100 * SUM(CASE WHEN g.answer = 3 THEN 1 END) / NULLIF(COUNT(g.answer),0),2), 0) AS "Khác"
-            FROM (
-                SELECT 1 AS answer, 'Hàng ngày' AS \`Tần suất mua sắm\`
-                UNION ALL SELECT 2, 'Hàng tuần' 
-                UNION ALL SELECT 3, 'Hàng tháng' 
-                UNION ALL SELECT 4, 'Hiếm khi' 
-            ) d
-            LEFT JOIN answers l 
-                ON l.answer = d.answer AND l.question_id = ?
-            LEFT JOIN questions q
-                ON l.question_id = q.id and q.survey_id = ?
-            LEFT JOIN answers g 
-                ON l.respondent_id = g.respondent_id
-                AND g.question_id = ?
-            GROUP BY d.answer, d.\`Tần suất mua sắm\`
-            ORDER BY d.answer;`,
-            [question_id, survey_id, gender_question]
+            WITH likert_scale AS (
+                SELECT 1 AS likert
+                UNION ALL SELECT 2
+                UNION ALL SELECT 3
+                UNION ALL SELECT 4
+            ),
+            survey_data AS (
+                SELECT
+                    a1.answer AS likert,
+                    a2.answer AS gender
+                FROM answers a1
+                JOIN answers a2
+                    ON a1.respondent_id = a2.respondent_id
+                JOIN respondents r
+                    ON a1.respondent_id = r.id
+                WHERE r.survey_id = ? 			
+                AND a1.question_id = ?		
+                AND a2.question_id = ?
+            ),
+            stats AS (
+                SELECT
+                    gender,
+                    likert,
+                    ROUND(
+                        COUNT(*) * 100.0 /
+                        SUM(COUNT(*)) OVER (PARTITION BY gender),
+                        2
+                    ) AS percentage
+                FROM survey_data
+                GROUP BY gender, likert
+            ),
+            percentages AS (
+                SELECT
+                    likert,
+                    MAX(CASE WHEN gender = 1 THEN percentage ELSE 0 END) AS Male,
+                    MAX(CASE WHEN gender = 2 THEN percentage ELSE 0 END) AS Female,
+                    MAX(CASE WHEN gender = 3 THEN percentage ELSE 0 END) AS Other
+                FROM stats
+                GROUP BY 1
+            )
+            SELECT
+                l.likert AS \`Tần suất mua sắm\`,
+                COALESCE(p.Male, 0) AS Nam,
+                COALESCE(p.Female, 0) AS Nữ,
+                COALESCE(p.Other, 0) AS Khác
+            FROM likert_scale l
+            LEFT JOIN percentages p
+                ON l.likert = p.likert
+            ORDER BY 1;`,
+            [survey_id, question_id, gender_question]
         );
 
         // for debug
