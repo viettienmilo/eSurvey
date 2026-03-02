@@ -81,7 +81,7 @@ export const postAnswer = async (req, res) => {
 
 export const getStats = async (req, res) => {
     const survey_id = req.params.id;
-    const stats = {}
+    const stats = {};
     try {
         var [results, _] = await connection.query(`
             SELECT title FROM surveys WHERE id=?;`, [survey_id]);
@@ -92,12 +92,67 @@ export const getStats = async (req, res) => {
         stats.question_size = results[0].question_size;
 
         var [results, _] = await connection.query(`
-            SELECT COUNT(*) AS survey_size FROM respondents WHERE survey_id=?;`, [survey_id]);
-        stats.survey_size = results[0].survey_size;
+            SELECT COUNT(*) AS respondents FROM respondents WHERE survey_id=?;`, [survey_id]);
+        stats.respondents = results[0].respondents;
 
+        // count gender
+        var [results, _] = await connection.query(`
+            SELECT
+                g.label AS gender,
+                COALESCE(COUNT(a.answer), 0) AS count
+            FROM (
+                SELECT 1 AS gender, 'Male' AS label
+                UNION ALL SELECT 2, 'Female'
+                UNION ALL SELECT 3, 'Other'
+            ) g
+            LEFT JOIN answers a
+                ON a.answer = g.gender
+            AND a.question_id = 1
+            LEFT JOIN respondents r
+                ON a.respondent_id = r.id
+            AND r.survey_id = ?
+            GROUP BY g.gender, g.label
+            ORDER BY g.gender;`, 
+            [survey_id]);
+        const genderMap = Object.fromEntries(results.map(item => [item.gender, item.count]));
+        stats.male = genderMap.Male ?? 0;
+        stats.female = genderMap.Female ?? 0;
+        stats.other = genderMap.Other ?? 0;
+
+        // count age
+        // "<18", "18-24", "25-34", "35-44", "45+"
+        var [results, _] = await connection.query(`
+            SELECT
+                g.label AS age,
+                COALESCE(COUNT(a.answer), 0) AS count
+            FROM (
+                SELECT 1 AS age, 'u18' AS label
+                UNION ALL SELECT 2, 'f18t24'
+                UNION ALL SELECT 3, 'f25t34'
+                UNION ALL SELECT 4, 'f35t44'
+                UNION ALL SELECT 5, 'over45'
+            ) g
+            LEFT JOIN answers a
+                ON a.answer = g.age
+            AND a.question_id = 2
+            LEFT JOIN respondents r
+                ON a.respondent_id = r.id
+            AND r.survey_id = 1
+            GROUP BY g.age, g.label
+            ORDER BY g.age;`,
+            [survey_id]);
+        const ageMap = Object.fromEntries(results.map(item => [item.age, item.count]));
+        stats.u18 = ageMap.u18 ?? 0;
+        stats.f18t24 = ageMap.f18t24 ?? 0;
+        stats.f25t34 = ageMap.f25t34 ?? 0;
+        stats.f35t44 = ageMap.f35t44 ?? 0;
+        stats.over45 = ageMap.over45 ?? 0;
+        // for debug
         console.log(stats);
-        return res.status(200).json(results[0]);
+        return res.status(200).json(stats);
     } catch (error) {
+        // for debug
+        // console.log(error)
         return res.status(500).json({ message: "Server error." });
     }
 }

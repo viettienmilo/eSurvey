@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router";
 
 const Navbar = () => {
@@ -108,9 +107,12 @@ const Navbar = () => {
         </ul>
       </div> */}
       <div className="navbar-end">
-        <a className="btn btn-soft btn-info text-slate-100 text-sm md:text">
-          Đăng nhập
-        </a>
+        <Link
+          to="/result"
+          className="btn btn-soft btn-info text-slate-100 text-sm md:text"
+        >
+          Xem kết quả
+        </Link>
       </div>
     </div>
   );
