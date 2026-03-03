@@ -15,7 +15,6 @@ const Result = () => {
         `/api/results/stats/${survey_id}`,
       );
       setStats(response.data);
-      console.log(response);
     };
     getStats();
   }, []);
