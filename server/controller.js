@@ -25,7 +25,7 @@ export const getQuestions = async (req, res) => {
     const id = req.params.id;
     try {
         const [results, _] = await connection.query(
-            `SELECT * FROM questions WHERE survey_id=? ORDER BY question_order LIMIT 5;`, [id]
+            `SELECT * FROM questions WHERE survey_id=? ORDER BY question_order;`, [id]
         );
         // for debug
         // console.log(results);
