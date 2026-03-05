@@ -12,8 +12,8 @@ import {
 const BarPlot = ({ data, xKeys, yKeys, xLabels, title }) => {
   return (
     <>
-      <h2 className="text-xl text-center mb-2">{title}</h2>
-      <ResponsiveContainer width="70%" aspect={2}>
+      <h2 className="text-xl text-center">{title}</h2>
+      <ResponsiveContainer width="70%" aspect={2.05}>
         <BarChart
           data={data}
           margin={{
