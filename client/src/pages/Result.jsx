@@ -39,9 +39,33 @@ const Result = () => {
     getPlot2Data();
   }, []);
 
-  // console.log(plot1Data);
-  // console.log(plot2Data);
-  //   console.log(stats);
+  const genders = [
+    { title: "Nam", value: stats?.male },
+    { title: "Nữ", value: stats?.female },
+    { title: "Khác", value: stats?.otherGender },
+  ];
+
+  const ages = [
+    { title: "<18", value: stats?.u18 },
+    { title: "18-24", value: stats?.f18t24 },
+    { title: "25-34", value: stats?.f25t34 },
+    { title: "35-44", value: stats?.f35t44 },
+    { title: "45+", value: stats?.over45 },
+  ];
+
+  const careers = [
+    { title: "SV/HS", value: stats?.student },
+    { title: "Nhân viên", value: stats?.staff },
+    { title: "Kinh doanh", value: stats?.business },
+    { title: "Khác", value: stats?.otherCareer },
+  ];
+
+  const income = [
+    { title: "<5tr", value: stats?.u5mil },
+    { title: "5-10tr", value: stats?.f5t10mil },
+    { title: "10-20tr", value: stats?.f10t20mil },
+    { title: ">20tr", value: stats?.over20mil },
+  ];
 
   const shoppingFreq = {
     1: "Hàng ngày",
@@ -58,7 +82,7 @@ const Result = () => {
         duration: 0.5,
         ease: "easeOut",
       }}
-      className="card card-border bg-base-100 w-full h-full mx-2"
+      className="card card-border bg-base-100 flex grow w-full mx-2"
     >
       <h2 className="card-title md:text-xl mx-3 my-2">KẾT QUẢ KHẢO SÁT</h2>
       <div className="card-body flex flex-col md:flex-row w-full h-full">
@@ -74,65 +98,43 @@ const Result = () => {
             Số người tham gia khảo sát:{" "}
             <i className="text-blue-400">{stats?.respondents}</i>
           </h2>
-          <h2 className="text-lg m-3 ml-5">Giới tính người tham gia khảo sát:</h2>
+          <h2 className="text-lg m-3 ml-5">
+            Giới tính người tham gia khảo sát:
+          </h2>
           <div className="ml-3">
-            <span className="text-lg m-3 ml-5">
-              Nam: <i className="text-blue-400">{stats?.male}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              Nữ: <i className="text-blue-400">{stats?.female}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              Khác: <i className="text-blue-400">{stats?.otherGender}</i>
-            </span>
+            {genders.map((item) => (
+              <span className="text-lg m-3 ml-5">
+                {item.title} : <i className="text-blue-400">{item.value}</i>
+              </span>
+            ))}
           </div>
           <h2 className="text-lg m-3 ml-5">Độ tuổi người tham gia khảo sát:</h2>
           <div className="ml-3">
-            <span className="text-lg m-3 ml-5">
-              Dưới 18t: <i className="text-blue-400">{stats?.u18}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              18-24t: <i className="text-blue-400">{stats?.f18t24}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              25-34t: <i className="text-blue-400">{stats?.f25t34}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              35-44t: <i className="text-blue-400">{stats?.f35t44}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              45t+: <i className="text-blue-400">{stats?.over45}</i>
-            </span>
+            {ages.map((item) => (
+              <span className="text-lg m-3 ml-5">
+                {item.title} : <i className="text-blue-400">{item.value}</i>
+              </span>
+            ))}
           </div>
-          <h2 className="text-lg m-3 ml-5">Nghề nghiệp người tham gia khảo sát:</h2>
+          <h2 className="text-lg m-3 ml-5">
+            Nghề nghiệp người tham gia khảo sát:
+          </h2>
           <div className="ml-3">
-            <span className="text-lg m-3 ml-5">
-              Sinh viên/HS: <i className="text-blue-400">{stats?.student}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              Nhân viên: <i className="text-blue-400">{stats?.staff}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              Kinh doanh: <i className="text-blue-400">{stats?.business}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              Khác: <i className="text-blue-400">{stats?.otherCareer}</i>
-            </span>
+            {careers.map((item) => (
+              <span className="text-lg m-3 ml-5">
+                {item.title} : <i className="text-blue-400">{item.value}</i>
+              </span>
+            ))}
           </div>
-          <h2 className="text-lg m-3 ml-5">Thu nhập người tham gia khảo sát:</h2>
+          <h2 className="text-lg m-3 ml-5">
+            Thu nhập người tham gia khảo sát:
+          </h2>
           <div className="ml-3">
-            <span className="text-lg m-3 ml-5">
-              Dưới 5 triệu: <i className="text-blue-400">{stats?.u5mil}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              5 - 10 triệu: <i className="text-blue-400">{stats?.f5t10mil}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              10 - 20 triệu: <i className="text-blue-400">{stats?.f10t20mil}</i>
-            </span>
-            <span className="text-lg m-3 ml-5">
-              Trên 20 triệu: <i className="text-blue-400">{stats?.over20mil}</i>
-            </span>
+            {income.map((item) => (
+              <span className="text-lg m-3 ml-5">
+                {item.title} : <i className="text-blue-400">{item.value}</i>
+              </span>
+            ))}
           </div>
         </div>
         <div className="w-3/5 mx-auto flex flex-col items-center">

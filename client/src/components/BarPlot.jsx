@@ -12,8 +12,8 @@ import {
 const BarPlot = ({ data, xKeys, yKeys, xLabels, title }) => {
   return (
     <>
-      <h2 className="text-xl text-center mb-2">{title}</h2>
-      <ResponsiveContainer width="70%" aspect={2}>
+      <h2 className="text-xl text-center">{title}</h2>
+      <ResponsiveContainer width="70%" aspect={2.05}>
         <BarChart
           data={data}
           margin={{
@@ -27,7 +27,7 @@ const BarPlot = ({ data, xKeys, yKeys, xLabels, title }) => {
           <XAxis dataKey={xKeys[0]} tickFormatter={(v) => xLabels[v]} />
           <YAxis />
           <Tooltip />
-          <Legend/>
+          <Legend />
           <Bar dataKey={yKeys[0]} fill="#84A8D8" radius={[10, 10, 0, 0]} />
           <Bar dataKey={yKeys[1]} fill="#D884C2" radius={[10, 10, 0, 0]} />
           <Bar dataKey={yKeys[2]} fill="#8884d8" radius={[10, 10, 0, 0]} />

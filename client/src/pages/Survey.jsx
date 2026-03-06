@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import axiosInstance from './../axios/instance.js';
+import axiosInstance from "./../axios/instance.js";
 import { survey_id } from "./../assets/data.js";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from 'canvas-confetti'
+import confetti from "canvas-confetti";
 import { Link } from "react-router";
 
 const Survey = () => {
@@ -35,7 +35,7 @@ const Survey = () => {
       const response = await axiosInstance.get(`/api/questions/${survey_id}`);
       setQuestions(response.data);
       setTotal(response.data?.length);
-    }
+    };
 
     getQuestions();
   }, []);
@@ -58,11 +58,14 @@ const Survey = () => {
   const finish = () => {
     const sendAnswer = async () => {
       try {
-        await axiosInstance.post("/api/answers/send-answer", { survey_id, answers });
+        await axiosInstance.post("/api/answers/send-answer", {
+          survey_id,
+          answers,
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
     sendAnswer();
     setStep(total + 1);
     confetti({
@@ -83,7 +86,7 @@ const Survey = () => {
     setAnswers({ ...answers, [questions[index].id]: value });
   };
 
-  console.log(answers);
+  // console.log(answers);
 
   return (
     <motion.div
@@ -100,13 +103,12 @@ const Survey = () => {
         {/* Intro */}
         {step === 0 && (
           <div className="flex-1 space-y-3 mt-6 lg:text-lg">
-            <p>
-              Sau đây là các câu hỏi khảo sát.
-            </p>
+            <p>Sau đây là các câu hỏi khảo sát.</p>
             <p>
               Sau khi chọn 1 trong các câu trả lời, Quý khách vui lòng nhấn nút
-              "Kế tiếp" để chuyển sang câu hỏi tiếp theo, nhấn "Quay lại" để trở về câu
-              hỏi trước đó. Nhấn "Làm lại" để thực hiện khảo sát lại từ đầu.
+              "Kế tiếp" để chuyển sang câu hỏi tiếp theo, nhấn "Quay lại" để trở
+              về câu hỏi trước đó. Nhấn "Làm lại" để thực hiện khảo sát lại từ
+              đầu.
             </p>
           </div>
         )}
@@ -169,22 +171,28 @@ const Survey = () => {
                   {/* Demographic options and Answers */}
                   {questions[step - 1].question_type === "select" && (
                     <div className="flex flex-col lg:flex-row w-full justify-around mx-6 my-6">
-                      {questions[step - 1].question_options.options.map((item, index) => (
-                        <label
-                          key={index}
-                          className="flex items-center gap-2 cursor-pointer"
-                        >
-                          <input
-                            type="radio"
-                            name={item}
-                            className="radio radio-accent"
-                            value={index + 1}
-                            checked={answers[questions[step - 1].id] == index + 1}
-                            onChange={(e) => handleChange(step - 1, e.target.value)}
-                          />
-                          <span className="text-md">{item}</span>
-                        </label>
-                      ))}
+                      {questions[step - 1].question_options.options.map(
+                        (item, index) => (
+                          <label
+                            key={index}
+                            className="flex items-center gap-2 cursor-pointer"
+                          >
+                            <input
+                              type="radio"
+                              name={item}
+                              className="radio radio-accent"
+                              value={index + 1}
+                              checked={
+                                answers[questions[step - 1].id] == index + 1
+                              }
+                              onChange={(e) =>
+                                handleChange(step - 1, e.target.value)
+                              }
+                            />
+                            <span className="text-md">{item}</span>
+                          </label>
+                        ),
+                      )}
                     </div>
                   )}
                 </div>
@@ -235,7 +243,8 @@ const Survey = () => {
               </button>
             )}
             {step === total + 1 && (
-              <Link to="/result"
+              <Link
+                to="/result"
                 type="button"
                 className="btn btn-success join-item"
               >

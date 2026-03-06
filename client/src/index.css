@@ -4,10 +4,70 @@
 
 @theme {
   --font-sans: Inter, sans-serif;
-  --color-bg-page: oklch(20.8% 0.042 265.755); /* slate-900*/
+
+  --color-peach-glow-50: #fdf1e7;
+  --color-peach-glow-100: #fbe3d0;
+  --color-peach-glow-200: #f7c6a1;
+  --color-peach-glow-300: #f4aa71;
+  --color-peach-glow-400: #f08d42;
+  --color-peach-glow-500: #ec7113;
+  --color-peach-glow-600: #bd5a0f;
+  --color-peach-glow-700: #8e440b;
+  --color-peach-glow-800: #5e2d08;
+  --color-peach-glow-900: #2f1704;
+  --color-peach-glow-950: #211003;
+
+  --color-space-indigo-50: #eff0f6;
+  --color-space-indigo-100: #dee2ed;
+  --color-space-indigo-200: #bec5da;
+  --color-space-indigo-300: #9da8c8;
+  --color-space-indigo-400: #7c8bb6;
+  --color-space-indigo-500: #5c6ea3;
+  --color-space-indigo-600: #495883;
+  --color-space-indigo-700: #374262;
+  --color-space-indigo-800: #252c41;
+  --color-space-indigo-900: #121621;
+  --color-space-indigo-950: #0d0f17;
+
+  --color-slate-grey-50: #f1f1f4;
+  --color-slate-grey-100: #e3e4e8;
+  --color-slate-grey-200: #c6c8d2;
+  --color-slate-grey-300: #aaadbb;
+  --color-slate-grey-400: #8e92a4;
+  --color-slate-grey-500: #71778e;
+  --color-slate-grey-600: #5b5f71;
+  --color-slate-grey-700: #444755;
+  --color-slate-grey-800: #2d2f39;
+  --color-slate-grey-900: #17181c;
+  --color-slate-grey-950: #101114;
+
+  --color-pale-slate-50: #eff1f5;
+  --color-pale-slate-100: #e0e3eb;
+  --color-pale-slate-200: #c1c6d7;
+  --color-pale-slate-300: #a2aac3;
+  --color-pale-slate-400: #838eaf;
+  --color-pale-slate-500: #63719c;
+  --color-pale-slate-600: #505b7c;
+  --color-pale-slate-700: #3c445d;
+  --color-pale-slate-800: #282d3e;
+  --color-pale-slate-900: #14171f;
+  --color-pale-slate-950: #0e1016;
+
+  --color-alice-blue-50: #eff1f6;
+  --color-alice-blue-100: #dee3ed;
+  --color-alice-blue-200: #bec6da;
+  --color-alice-blue-300: #9daac8;
+  --color-alice-blue-400: #7c8eb6;
+  --color-alice-blue-500: #5c71a3;
+  --color-alice-blue-600: #495b83;
+  --color-alice-blue-700: #374462;
+  --color-alice-blue-800: #252d41;
+  --color-alice-blue-900: #121721;
+  --color-alice-blue-950: #0d1017;
+
 }
 
 html {
   font-family: var(--font-sans);
-  background-color: var(--color-bg-page);
+  background-color: oklch(20.8% 0.042 265.755); /* slate-900*/
 }
